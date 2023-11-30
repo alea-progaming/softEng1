@@ -1,50 +1,36 @@
 package observerPattern;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class NewsAgency implements NewsAgencySubject, SubObserver{
-    private List<Subscriber> subscriber;
-    private String news;
+public class NewsAgency implements NewsAgencySubject {
+    private Map<String, List<Subscriber>> subscribersByCategory = new HashMap<>();
 
-    public List<Subscriber> getSubscriber() {
-        return subscriber;
-    }
-
-    public void setSubscriber(List<Subscriber> subscriber) {
-        this.subscriber = subscriber;
-    }
-
-    public String getNews() {
-        return news;
-    }
-
-    public void setNews(String news) {
-        this.news = news;
+    @Override
+    public void addSubscribe(Subscriber subName, String category) {
+        subscribersByCategory.computeIfAbsent(category, k -> new ArrayList<>()).add(subName);
+        System.out.println(subName.getName() + " subscribed to " + category + " news updates.");
     }
 
     @Override
-    public String notifySubscribers() {
-        String output = new String();
-        for (Subscriber sub : subscriber) {
-            output += "Hey, " + sub.getSubName() + "!\n";
-            output += news + ": Former CEO of OpenAI, Sam Altman, has been re-hired after being fired for 4 days." + "\n\n";
+    public void removeSubscribe(Subscriber subName, String category) {
+        subscribersByCategory.getOrDefault(category, new ArrayList<>()).remove(subName);
+    }
+
+    @Override
+    public void notifySubscribers(String newsUpdate, String category) {
+        List<Subscriber> subscribers = subscribersByCategory.getOrDefault(category, new ArrayList<>());
+        for (Subscriber subscriber : subscribers) {
+            subscriber.update(newsUpdate);
         }
-        return output;
     }
 
-    @Override
-    public void subscribe(Subscriber subName) {
-        subscriber.add(subName);
-    }
+        public void publishNewsUpdate(String newsUpdate, String category){
+            System.out.println("\nNews Agency : New " + category + " update - " + newsUpdate);
+            notifySubscribers(newsUpdate, category);
+        }
 
-    @Override
-    public void unsubscribe(Subscriber subName) {
-        subscriber.remove(subName);
-    }
-
-    @Override
-    public void newsUpdate(NewsAgency newsAgency) {
-
-    }
 
 
 }

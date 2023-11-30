@@ -1,7 +1,7 @@
 package observerPattern;
 
 public interface NewsAgencySubject {
-    public String notifySubscribers();
-    public void subscribe(Subscriber subName);
-    public void unsubscribe(Subscriber subName);
+    public void notifySubscribers(String newsUpdate, String category);
+    public void addSubscribe(Subscriber subName, String category);
+    public void removeSubscribe(Subscriber subName, String category);
 }
