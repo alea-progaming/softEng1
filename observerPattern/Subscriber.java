@@ -14,7 +14,7 @@ public class Subscriber implements SubObserver{
     @Override
     public String getName() {
         return subName;
-    }
+    }   
 
     @Override
     public void update(String newsUpdate){
